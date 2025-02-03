@@ -15,6 +15,7 @@ include("HW2_your_code.jl")
 # Change size_list to choose matrix 
 # sizes suitable for your system
 size_list = 2 .^ (6 : 12)
+# size_list = 2 .^ (1 : 4)
 ########################################
 time_kernel = Float64[]
 time_BLAS = Float64[]
