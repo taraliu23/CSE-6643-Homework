@@ -14,7 +14,7 @@ include("HW2_your_code.jl")
 ########################################
 # Change size_list to choose matrix 
 # sizes suitable for your system
-size_list = 2 .^ (6 : 12)
+size_list = 2 .^ (6:12)
 # size_list = 2 .^ (1 : 4)
 ########################################
 time_kernel = Float64[]
@@ -25,7 +25,7 @@ for sz in size_list
     global C = rand(sz, sz)
     if sz < 1000
         push!(time_kernel, @belapsed add_to_A_B_times_C!(A, B, C))
-    else 
+    else
         push!(time_kernel, @elapsed add_to_A_B_times_C!(A, B, C))
     end
     push!(time_BLAS, @belapsed mul!(A, B, C))
@@ -49,7 +49,8 @@ allocated_memory = @ballocated add_to_A_B_times_C!(A, B, C, 301)
 @assert allocated_memory == 0
 println("No memory allocated, good!")
 println("Testing correctness of blocked matmul...")
-A .= 0; add_to_A_B_times_C!(A, B, C, 301)
+A .= 0;
+add_to_A_B_times_C!(A, B, C, 301);
 @assert A ≈ B * C
 println("Result correct, good!")
 #----------------------------------------
@@ -66,7 +67,7 @@ m = 6011
 n = 6070
 # Modify 
 # sizes suitable for your system
-block_sizes = 2 .^ (2 : 12)
+block_sizes = 2 .^ (2:12)
 ########################################
 time_blocked = Float64[]
 for bks in block_sizes
@@ -92,7 +93,8 @@ allocated_memory = @ballocated oblivious_add_to_A_B_times_C!(A, B, C, 64)
 @assert allocated_memory == 0
 println("No memory allocated, good!")
 println("Testing correctness of oblivious matmul...")
-A .= 0; oblivious_add_to_A_B_times_C!(A, B, C, 64)
+A .= 0;
+oblivious_add_to_A_B_times_C!(A, B, C, 64);
 @assert A ≈ B * C
 println("Result correct, good!")
 #----------------------------------------

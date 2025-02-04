@@ -16,9 +16,8 @@ end
 # Make sure that your function does not allocate memory
 function add_to_A_B_times_C!(A, B, C, bks)
 
-
     #=
-    a blocked/ tiled variant of add_to_A_B_times_C! that takes an integer bks as a fourth input
+    Blocked/ tiled variant of add_to_A_B_times_C! that takes an integer bks as a fourth input
 
     input: A(matrix), B(matrix), C(matrix), bks(Integer)
     output: A
@@ -33,7 +32,6 @@ function add_to_A_B_times_C!(A, B, C, bks)
     3. get block size
     4. get block
     5. call the original function with the block
-
     =#
 
 
@@ -65,7 +63,7 @@ end
 function oblivious_add_to_A_B_times_C!(A, B, C, bks)
 
     #=
-    a recursive, cache-oblivious variant of add_to_A_B_times_C! that takes an integer bks as a fourth input
+    Recursive, cache-oblivious variant of add_to_A_B_times_C! that takes an integer bks as a fourth input
 
     input: A(matrix), B(matrix), C(matrix), bks(Integer)
     output: A
@@ -77,59 +75,51 @@ function oblivious_add_to_A_B_times_C!(A, B, C, bks)
     process:
     1. get matrices' sizes
     2. check if we can further subdivide
-    3. get midpoints
+    3. get mpoints
     4. divide matrices into 4 parts
     5. divide matrices into blocks
     6. call the function recursively on the 8 subproblems
 
     =#
 
-
     i_size = size(A, 1)
     j_size = size(C, 2)
     k_size = size(B, 2)
 
-
-
     # If we want to further subdivide
     if min(i_size, j_size, k_size) > bks
 
+        i_m = i_size ÷ 2
+        j_m = j_size ÷ 2
+        k_m = k_size ÷ 2
 
-        i_mid = i_size ÷ 2
-        j_mid = j_size ÷ 2
-        k_mid = k_size ÷ 2
+        A_11 = view(A, 1:i_m, 1:j_m)
+        A_12 = view(A, 1:i_m, j_m+1:j_size)
+        A_21 = view(A, i_m+1:i_size, 1:j_m)
+        A_22 = view(A, i_m+1:i_size, j_m+1:j_size)
 
+        B_11 = view(B, 1:i_m, 1:k_m)
+        B_12 = view(B, 1:i_m, k_m+1:k_size)
+        B_21 = view(B, i_m+1:i_size, 1:k_m)
+        B_22 = view(B, i_m+1:i_size, k_m+1:k_size)
 
-        A11 = view(A, 1:i_mid, 1:j_mid)
-        A12 = view(A, 1:i_mid, j_mid+1:j_size)
-        A21 = view(A, i_mid+1:i_size, 1:j_mid)
-        A22 = view(A, i_mid+1:i_size, j_mid+1:j_size)
+        C_11 = view(C, 1:k_m, 1:j_m)
+        C_12 = view(C, 1:k_m, j_m+1:j_size)
+        C_21 = view(C, k_m+1:k_size, 1:j_m)
+        C_22 = view(C, k_m+1:k_size, j_m+1:j_size)
 
-        B11 = view(B, 1:i_mid, 1:k_mid)
-        B12 = view(B, 1:i_mid, k_mid+1:k_size)
-        B21 = view(B, i_mid+1:i_size, 1:k_mid)
-        B22 = view(B, i_mid+1:i_size, k_mid+1:k_size)
+        oblivious_add_to_A_B_times_C!(A_11, B_11, C_11, bks)
+        oblivious_add_to_A_B_times_C!(A_11, B_12, C_21, bks)
+        oblivious_add_to_A_B_times_C!(A_12, B_11, C_12, bks)
+        oblivious_add_to_A_B_times_C!(A_12, B_12, C_22, bks)
 
-        C11 = view(C, 1:k_mid, 1:j_mid)
-        C12 = view(C, 1:k_mid, j_mid+1:j_size)
-        C21 = view(C, k_mid+1:k_size, 1:j_mid)
-        C22 = view(C, k_mid+1:k_size, j_mid+1:j_size)
-
-
-        oblivious_add_to_A_B_times_C!(A11, B11, C11, bks)
-        oblivious_add_to_A_B_times_C!(A11, B12, C21, bks)
-        oblivious_add_to_A_B_times_C!(A12, B11, C12, bks)
-        oblivious_add_to_A_B_times_C!(A12, B12, C22, bks)
-        oblivious_add_to_A_B_times_C!(A21, B21, C11, bks)
-        oblivious_add_to_A_B_times_C!(A21, B22, C21, bks)
-        oblivious_add_to_A_B_times_C!(A22, B21, C12, bks)
-        oblivious_add_to_A_B_times_C!(A22, B22, C22, bks)
+        oblivious_add_to_A_B_times_C!(A_21, B_21, C_11, bks)
+        oblivious_add_to_A_B_times_C!(A_21, B_22, C_21, bks)
+        oblivious_add_to_A_B_times_C!(A_22, B_21, C_12, bks)
+        oblivious_add_to_A_B_times_C!(A_22, B_22, C_22, bks)
 
     else
         add_to_A_B_times_C!(A, B, C)
-
-
-
 
     end
 end
