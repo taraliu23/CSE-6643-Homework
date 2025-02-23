@@ -6,17 +6,17 @@ using LinearAlgebra: I, norm
 using CairoMakie
 include("HW3_your_code.jl")
 
-
 #----------------------------------------
 # Problem a + b
 #----------------------------------------
 ########################################
 A = randn(20, 20) + 100 * I
 b = randn(20)
-reference_x = A \ b
+
+ref_x = A \ b
 unpivoted_LU!(A)
 substitution!(b, A)
-@assert reference_x ≈ b
+@assert ref_x ≈ b
 
 allocated_memory = @ballocated unpivoted_LU!(A)
 allocated_memory += @ballocated substitution!(b, A)
@@ -27,8 +27,6 @@ allocated_memory += @ballocated substitution!(b, A)
 #----------------------------------------
 # YOUR CODE GOES HERE
 
-
-
 m_values = 10:10:100
 errors = Float64[]
 growth_factors = Float64[]
@@ -36,30 +34,95 @@ growth_factors = Float64[]
 for m in m_values
     A = randn(m, m) + 100 * I
     b = randn(m)
-    reference_x = A \ b
+    ref_x = A \ b
 
-    # Perform unpivoted LU factorization
-    LU = copy(A)
+    LU = deepcopy(A)
     unpivoted_LU!(LU)
-    x = copy(b)
+    x = deepcopy(b)
     substitution!(x, LU)
 
-    # Compute relative error
-    push!(errors, norm(x - reference_x) / norm(reference_x))
+    # relative error
+    push!(errors, norm(x - ref_x) / norm(ref_x))
 
-    # Compute growth factor
+    # growth factor
     push!(growth_factors, norm(LU, Inf) / norm(A, Inf))
 end
 
 
 fig = Figure()
-ax1 = Axis(fig[1, 1], xlabel="Matrix Size (m)", ylabel="Relative Error", title="Relative Error vs. Matrix Size")
-ax2 = Axis(fig[1, 2], xlabel="Matrix Size (m)", ylabel="Growth Factor", title="Growth Factor vs. Matrix Size")
 
-lines!(ax1, m_values, errors, label="Relative Error")
-lines!(ax2, m_values, growth_factors, label="Growth Factor", color=:red)
+supertitle = Label(
+    fig[0, :],
+    "Relative Error and Growth Factor with Matrix Size",
+    # fontsize=20,
+    font="courier")
 
-save("error_growth_plot.png", fig)
+ax1 = Axis(
+    fig[1, 1],
+    xlabel="Matrix Size",
+    ylabel="Relative Error",
+    titlefont="courier",
+    xlabelfont="courier",
+    ylabelfont="courier",
+    xticklabelfont="courier",
+    yticklabelfont="courier",
+)
+
+ax2 = Axis(
+    fig[2, 1],
+    xlabel="Matrix Size",
+    ylabel="Growth Factor",
+    titlefont="courier",
+    xlabelfont="courier",
+    ylabelfont="courier",
+    xticklabelfont="courier",
+    yticklabelfont="courier",
+)
+
+hidespines!(ax1, :t, :r)
+hidespines!(ax2, :t, :r)
+
+
+sca = scatter!(
+    ax1,
+    m_values,
+    errors,
+    color=:orange,
+    strokecolor=:orange,
+    strokewidth=1,
+    markersize=5
+)
+
+sca = scatter!(
+    ax2,
+    m_values,
+    growth_factors,
+    color=:purple,
+    strokecolor=:purple,
+    strokewidth=1,
+    markersize=5
+)
+
+lines!(
+    ax1,
+    m_values,
+    errors,
+    label="Relative Error",
+    color=:orange,
+    linewidth=0.6
+)
+
+lines!(
+    ax2,
+    m_values,
+    growth_factors,
+    label="Growth Factor",
+    color=:purple,
+    linewidth=0.6
+)
+
+
+save("c.png", fig)
 
 #----------------------------------------
 # Problem d
@@ -67,41 +130,67 @@ save("error_growth_plot.png", fig)
 ########################################
 A = (randn(20, 20)+100*I)[randperm(20), :]
 b = randn(20)
-reference_x = A \ b
+ref_x = A \ b
 P = pivoted_LU!(A)
 substitution!(b, A, P)
-@assert reference_x ≈ b
+@assert ref_x ≈ b
 
 #----------------------------------------
 # Problem e
 #----------------------------------------
 # YOUR CODE GOES HERE
 #----------------------------------------
-# Problem e
-#----------------------------------------
-# Test the growth_matrix function and compare errors
+
 m_values = 10:10:100
 errors = Float64[]
 
 for m in m_values
     A = growth_matrix(m)
     b = randn(m)
-    reference_x = A \ b
+    ref_x = A \ b
 
-    # Perform pivoted LU factorization
-    LU = copy(A)
+    LU = deepcopy(A)
     P = pivoted_LU!(LU)
-    x = copy(b)
+    x = deepcopy(b)
     substitution!(x, LU, P)
 
-    # Compute relative error
-    push!(errors, norm(x - reference_x) / norm(reference_x))
+    # relative error
+    push!(errors, norm(x - ref_x) / norm(ref_x))
 end
 
-# Plot errors
 fig = Figure()
-ax = Axis(fig[1, 1], xlabel="Matrix Size (m)", ylabel="Relative Error", title="Error for growth_matrix")
+ax = Axis(
+    fig[1, 1],
+    xlabel="Matrix Size",
+    ylabel="Relative Error",
+    title="Error for growth_matrix",
+    titlefont="courier",
+    xlabelfont="courier",
+    ylabelfont="courier",
+    xticklabelfont="courier",
+    yticklabelfont="courier",
+)
 
-lines!(ax, m_values, errors, label="Relative Error", color=:blue)
+lines!(
+    ax,
+    m_values,
+    errors,
+    label="Relative Error",
+    color=:blue,
+    linewidth=1
+)
 
-save("growth_matrix_error_plot.png", fig)
+sca = scatter!(
+    ax,
+    m_values,
+    errors,
+    color=:blue,
+    strokecolor=:blue,
+    strokewidth=1,
+    markersize=10
+)
+
+hidespines!(ax, :t, :r)
+
+
+save("e.png", fig)
