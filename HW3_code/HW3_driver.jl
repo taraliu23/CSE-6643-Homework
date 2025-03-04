@@ -34,6 +34,7 @@ growth_factors = Float64[]
 for m in m_values
     A = randn(m, m) + 100 * I
     b = randn(m)
+
     ref_x = A \ b
 
     LU = deepcopy(A)
@@ -145,9 +146,10 @@ m_values = 10:10:100
 errors = Float64[]
 
 for m in m_values
-    A = growth_matrix(m)
-    b = randn(m)
-    ref_x = A \ b
+    # A = growth_matrix(m)
+    # b = randn(m)
+    # ref_x = A \ b
+    ref_x = growth_matrix(m) \ randn(m)
 
     LU = deepcopy(A)
     P = pivoted_LU!(LU)
@@ -155,10 +157,14 @@ for m in m_values
     substitution!(x, LU, P)
 
     # relative error
-    push!(errors, norm(x - ref_x) / norm(ref_x))
+    push!(
+        errors,
+        norm(x - ref_x) / norm(ref_x)
+    )
 end
 
 fig = Figure()
+
 ax = Axis(
     fig[1, 1],
     xlabel="Matrix Size",
@@ -191,6 +197,5 @@ sca = scatter!(
 )
 
 hidespines!(ax, :t, :r)
-
 
 save("e.png", fig)
