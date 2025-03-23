@@ -1,6 +1,10 @@
 # Code for Numerical Linear Algebra
 
+
+
 ## Run in your machine
+
+Using hw4 as an example:
 
 ``` bash
 cd HW4_code
@@ -20,3 +24,5 @@ julia --project=. HW4_driver.jl
 [数值线性代数](https://kuidu.github.io/nla.html)
 
 [数值线性代数基础复习](http://faculty.bicmr.pku.edu.cn/~wenzw/optbook/lect/04-num_lin_alg-newl.pdf)
+
+[通俗易懂：什么是正交矩阵](https://zhuanlan.zhihu.com/p/684677360)
