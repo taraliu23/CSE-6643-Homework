@@ -1,1 +1,9 @@
-![Ivory Minimal Lined Marketing List Business LinkedIn Post](https://github.com/user-attachments/assets/032e0290-6cc2-425d-970c-df3448b0907d)
+
+<img 
+  src="https://github.com/user-attachments/assets/34de3660-cd51-4254-8f5c-7284b2841219" 
+  alt="drawing" 
+  width="600"
+  align="center"
+  />
+
+
