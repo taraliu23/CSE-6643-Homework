@@ -12,3 +12,13 @@
 - All eigenproblem methods must be iterative: they must consist of improving an initial guess, in successive steps, so that it converges towards the exact result to any desired accuracy, but never actually reaches the exact answer in general. 
 
 - 标准正交基Orthonormal basis：一个内积空间的正交基是元素两两正交的基。称基中的元素为基向量。正交基基向量的模长都是单位长度1，则称这正交基为标准正交基或"规范正交基"。 
+
+- QR iteration is known for being numerically stable and widely used in practice.
+
+- LU iteration, especially without pivoting, is less stable — but her e it’s applied to a special case: symmetric positive-definite matrices.
+
+- 单位矩阵Identity Matrix(I)主对角线上的元素全为1，其他元素全为0。
+
+- Positive definite matrix has a unique positive definite square root.
+
+- Every Hermitian positive-definite matrix (and thus also every real-valued symmetric positive-definite matrix) has a unique Cholesky decomposition
