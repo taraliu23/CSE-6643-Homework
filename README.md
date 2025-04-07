@@ -27,6 +27,12 @@ julia --project=. HW4_driver.jl
 
 [通俗易懂：什么是正交矩阵](https://zhuanlan.zhihu.com/p/684677360)
 
+[非对称特征值问题](https://math.ecnu.edu.cn/~jypan/Teaching/MNA/slides_ch04_eig_nonsymm.pdf)
+
+  - QR 迭代方法
+
+[QR Algorithm](https://www.seas.ucla.edu/~vandenbe/133B/lectures/qr.pdf)
+
 ## Review Notes (Chinese & English, messy)
 
 - 奇异矩阵和非奇异矩阵是属于方阵的概念，只要不是方阵，那这俩概念就免谈了。然后，再看此矩阵的行列式|A|是否等于0：|A|等于0，A就是奇异矩阵;反之则是非奇异矩阵。
@@ -57,3 +63,5 @@ julia --project=. HW4_driver.jl
 - A matrix is diagonalizable if and only if there exists a factored polynomial of single roots at is 0 when you evaluate it with the matrix. For instance if (A-1)(A+2)A = 0, then A is diagonalizable and its eigenvalues are (+1, -2, 0), but you cannot say anything about their multiplicity.
 
 - A singular matrix is a square matrix whose determinant is zero. Since the determinant is zero, a singular matrix is non-invertible, which does not have an inverse.
+
+- 理论上, 反迭代 + 位移策略, 可以计算矩阵的任意一个特征值。
