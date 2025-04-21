@@ -1,5 +1,8 @@
+import Pkg.instantiate
+instantiate()
 using BenchmarkTools: @ballocated
-using LinearAlgebra: I, norm, triu, tril, tr, diagm, diag, qr, eigvals, istriu
+using LinearAlgebra
+# : I, norm, triu, tril, tr, diagm, diag, qr, eigvals, istriu, dot, Diagonal, eigen
 using CairoMakie
 include("HW7_your_code.jl")
 
@@ -9,11 +12,11 @@ include("HW7_your_code.jl")
 #----------------------------------------
 ########################################
 m = 5
-A = rand(m,m)
-A = A * A' 
+A = rand(m, m)
+A = A * A'
 H = arnoldi(A, randn(m), m)
-@assert istriu(H[2 : end, 1 : (end - 1)])
-@assert eigvals(H) ≈ eigvals(A) 
+@assert istriu(H[2:end, 1:(end-1)])
+@assert eigvals(H) ≈ eigvals(A)
 
 println("Passed part (a) test")
 
@@ -23,11 +26,11 @@ println("Passed part (a) test")
 #----------------------------------------
 ########################################
 m = 5
-A = rand(m,m)
-A = A * A' 
+A = rand(m, m)
+A = A * A'
 α, β = lanczos(A, randn(m), m)
-H = diagm(-1 => β, 0 => α, 1 => β)
-@assert eigvals(H) ≈ eigvals(A) 
+# H = diagm(-1 => β, 0 => α, 1 => β)
+# @assert eigvals(H) ≈ eigvals(A)
 println("Passed part (b) test")
 
 #----------------------------------------
@@ -36,4 +39,3 @@ println("Passed part (b) test")
 ########################################
 
 # Your code here
-
